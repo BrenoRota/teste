@@ -87,11 +87,11 @@ app.get('/', checkLogin, (req, res) => {
                 <div class="container mt-5">
                     <h2>Bem-vindo, ${user.username}</h2>
                     <p>Último acesso: ${lastAccess}</p>
-                    <nav>
-                        <a href="/cadastroUsuario" class="btn btn-secondary">Cadastro de Usuários</a><br>
-                        <a href="/chat" class="btn btn-primary">Bate-papo</a><br>
-                        <a href="/logout" class="btn btn-danger">Sair</a><br>
-                    </nav>
+                    <div class="btn-group" role="group" aria-label="Menu de navegação">
+                        <a href="/cadastroUsuario" class="btn btn-secondary">Cadastro de Usuários</a>
+                        <a href="/chat" class="btn btn-primary">Bate-papo</a>
+                        <a href="/logout" class="btn btn-danger">Sair</a>
+                    </div>
                 </div>
             </body>
         </html>
