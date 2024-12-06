@@ -189,7 +189,7 @@ app.get('/chat', checkLogin, (req, res) => {
                     <div class="mt-5">
                         <h3>Mensagens</h3>
                         <ul>
-                            ${messages.map(msg => `<li><b>${msg.usuario}:</b> ${msg.texto}</li>`).join('')}
+                            ${messages.map(msg => `<li><b>${msg.usuario}:</b> ${msg.texto} <span class="text-muted">[${msg.dataHora}]</span></li>`).join('')}
                         </ul>
                     </div>
                 </div>
@@ -202,7 +202,8 @@ app.get('/chat', checkLogin, (req, res) => {
 app.post('/postarMensagem', checkLogin, (req, res) => {
     const { usuario, mensagem } = req.body;
     if (usuario && mensagem) {
-        messages.push({ usuario, texto: mensagem });
+        const dataHora = new Date().toLocaleString();
+        messages.push({ usuario, texto: mensagem, dataHora });
         res.redirect('/chat');
     } else {
         res.send('<h1>Erro ao enviar mensagem. Tente novamente.</h1>');
