@@ -8,18 +8,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Sessão de usuário
 app.use(session({
     secret: 'chatappsecret',
     resave: false,
     saveUninitialized: true
 }));
 
-// Banco de dados simulado (em memória)
 let users = [];
 let messages = [];
 
-// Middleware para verificar se o usuário está logado
 function checkLogin(req, res, next) {
     if (!req.session.user) {
         return res.redirect('/login');
@@ -27,15 +24,12 @@ function checkLogin(req, res, next) {
     next();
 }
 
-// Rota de login (GET) - alterado para buscar o arquivo login.html na pasta 'logar'
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'logar', 'login.html'));
 });
 
-// Rota POST de login
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    // Lógica de autenticação simples: verifique se o usuário e a senha existem
     if (username && password) {
         req.session.user = { username };
         res.redirect('/');
@@ -44,7 +38,6 @@ app.post('/login', (req, res) => {
     }
 });
 
-// Função para renderizar o menu
 function menu() {
     return `
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -71,7 +64,6 @@ function menu() {
     `;
 }
 
-// Rota principal (Menu)
 app.get('/', checkLogin, (req, res) => {
     const user = req.session.user;
     const lastAccess = req.cookies.lastAccess || "Nunca";
@@ -98,7 +90,6 @@ app.get('/', checkLogin, (req, res) => {
     `);
 });
 
-// Rota de cadastro de usuário
 app.get('/cadastroUsuario', checkLogin, (req, res) => {
     res.send(`
         <html>
@@ -160,7 +151,6 @@ app.post('/cadastrarUsuario', checkLogin, (req, res) => {
     }
 });
 
-// Rota do bate-papo
 app.get('/chat', checkLogin, (req, res) => {
     res.send(`
         <html>
@@ -198,7 +188,6 @@ app.get('/chat', checkLogin, (req, res) => {
     `);
 });
 
-// Rota de postagem de mensagem
 app.post('/postarMensagem', checkLogin, (req, res) => {
     const { usuario, mensagem } = req.body;
     if (usuario && mensagem) {
@@ -210,14 +199,12 @@ app.post('/postarMensagem', checkLogin, (req, res) => {
     }
 });
 
-// Rota de logout
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.clearCookie('lastAccess');
     res.redirect('/login');
 });
 
-// Iniciar o servidor
 const port = 3000;
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
